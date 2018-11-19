@@ -15,10 +15,32 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('new user connected')
 
+    // socket.emit('newEmail', {
+    //     from: "Mike@example.com",
+    //     text: "He what is goin on",
+    //     createdAt: 123
+    // })
+
+    socket.emit('newMessage', {
+        from: 'Bert',
+        text: 'Meeting tonight 21.30h, at my place!',
+        createdAt: new Date().toUTCString()
+    })
+
+    // socket.on('createEmail', (newEmail) => {
+    //     console.log('createEmail', newEmail)
+    // })
+
+    socket.on('createMessage', (msg) => {
+        console.log('createMessage', msg)
+    })
+
     socket.on('disconnect', () => {
         console.log('User disconnected')
     })
 })
+
+
 
 //app.set('view engine', 'pug');
 
