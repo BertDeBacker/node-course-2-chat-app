@@ -2,6 +2,7 @@ const path = require('path')
 const http = require('http')
 const express = require('express')
 const socketIO = require('socket.io')
+const { generateMessage } = require('./utils/message')
 
 const publicPath = path.join(__dirname, '../public')
 const port = process.env.PORT || 3000
@@ -19,43 +20,35 @@ io.on('connection', (socket) => {
     console.log(`Currently ${nConnectedUsers} users connected.`)
 
     // socket.emit from Admin text Welcome to the chat app
-    socket.emit('newMessage', {
-        from: 'Admin',
-        text: 'Welcome to the chat app.'
-    })
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app.'))
 
-    socket.broadcast.emit('newMessage', {
-        from: 'Admin',
-        text: 'New user has joined'
-    })
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined.'))
 
 
     socket.on('createMessage', (msg) => {
-
         //socket.broadcoast.emit from Admin text 
-        io.emit('newMessage', {
-            from: msg.from,
-            text: msg.text,
-            createdAt: new Date().getTime()
-        })
-
-
-        // //broadcasting means send to everyone except for the sender.
-        // socket.broadcast.emit('newMessage', {
-        //     from: msg.from,
-        //     text: msg.text,
-        //     createdAt: new Date().getTime()
-        // })
-
+        io.emit('newMessage', generateMessage(msg.from, msg.text))
     })
+
+
+    // //broadcasting means send to everyone except for the sender.
+    // socket.broadcast.emit('newMessage', {
+    //     from: msg.from,
+    //     text: msg.text,
+    //     createdAt: new Date().getTime()
+    // })
 
     socket.on('disconnect', () => {
         console.log('User disconnected')
         nConnectedUsers--
         console.log(`Currently ${nConnectedUsers} users connected.`)
-
     })
+
 })
+
+
+
+
 
 
 
