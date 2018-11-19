@@ -21,22 +21,16 @@ io.on('connection', (socket) => {
 
     // socket.emit from Admin text Welcome to the chat app
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app.'))
-
     socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined.'))
 
-
-    socket.on('createMessage', (msg) => {
+    socket.on('createMessage', (msg, callback) => {
         //socket.broadcoast.emit from Admin text 
-        io.emit('newMessage', generateMessage(msg.from, msg.text))
+        var message = generateMessage(msg.from, msg.text)
+        console.log(message)
+
+        io.emit('newMessage', message)
+        callback('this is from the server')
     })
-
-
-    // //broadcasting means send to everyone except for the sender.
-    // socket.broadcast.emit('newMessage', {
-    //     from: msg.from,
-    //     text: msg.text,
-    //     createdAt: new Date().getTime()
-    // })
 
     socket.on('disconnect', () => {
         console.log('User disconnected')
