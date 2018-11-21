@@ -10,6 +10,7 @@
 ul,
 li {
     list-style-position: inside;
+    background-color: red
 }
 
 h3 {
@@ -132,12 +133,14 @@ button:disabled {
     flex-direction: column;
     height: 100vh;
     width: 100%;
+    background-color: pink
 }
 
 .chat__messages {
     flex-grow: 1;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
+    background: lightgreen
 }
 
 .chat__footer {
